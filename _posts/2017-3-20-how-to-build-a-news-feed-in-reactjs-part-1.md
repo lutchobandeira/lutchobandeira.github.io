@@ -1066,7 +1066,7 @@ class Feed extends Component {
   } -->
 </code></pre>
 
-[Ver no CodePen](https://codepen.io/lutchobandeira/pen/JWOyON){:target="_blank"}
+[Try on CodePen](https://codepen.io/lutchobandeira/pen/JWOyON){:target="_blank"}
 
 Next steps
 ----------
