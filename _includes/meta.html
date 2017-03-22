@@ -4,15 +4,37 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
 
     {% if page.excerpt %}
-    <meta name="description" content="{{ page.excerpt| strip_html }}" />
-    <meta property="og:description" content="{{ page.excerpt| strip_html }}" />
+    <meta name="description"         content="{{ page.excerpt| strip_html }}" />
+    <meta property="og:description"  content="{{ page.excerpt| strip_html }}" />
+    <meta name="twitter:description" content="{{ page.excerpt| strip_html }}">
     {% else %}
-    <meta name="description" content="{{ site.description }}">
-    <meta property="og:description" content="{{ site.description }}" />
+    <meta name="description"         content="{{ site.description }}">
+    <meta property="og:description"  content="{{ site.description }}" />
+    <meta name="twitter:description" content="{{ site.description }}">
     {% endif %}
     <meta name="author" content="{{ site.name }}" />
+    <meta name="twitter:site" content="@lutchobandeira">
+    <meta name="twitter:creator" content="{{ site.name }}">
+    <meta property="og:type" content="article" />
 
     {% if page.title %}
-    <meta property="og:title" content="{{ page.title }}" />
-    <meta property="twitter:title" content="{{ page.title }}" />
+    <meta property="og:title"  content="{{ page.title }}" />
+    <meta name="twitter:title" content="{{ page.title }}" />
+    {% else %}
+    <meta property="og:title"  content="{{ site.title }}" />
+    <meta name="twitter:title" content="{{ site.title }}">
+    {% endif %}
+
+    {% if page.url %}
+    <meta property="og:url"  content="{{ site.url }}{{ page.url }}">
+    <meta name="twitter:url" content="{{ site.url }}{{ page.url }}">
+    {% endif %}
+
+    {% if page.thumbnail %}
+    <meta property="og:image"      content="{{ site.url }}{{ page.thumbnail }}">
+    <meta name="twitter:image:src" content="{{ site.url }}{{ page.thumbnail }}">
+    <meta name="twitter:card"      content="summary_large_image">
+    {% else %}
+    <meta property="og:image"      content="https://avatars0.githubusercontent.com/u/1225630">
+    <meta name="twitter:image:src" content="https://avatars0.githubusercontent.com/u/1225630">
     {% endif %}
