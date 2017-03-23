@@ -2,6 +2,7 @@
 layout: post
 title: Como fazer um feed de notícias em React.js - Parte 1
 thumbnail: /images/react-part-1.png
+short_url: https://goo.gl/nJmg14
 ref: react_1
 lang: pt
 ---

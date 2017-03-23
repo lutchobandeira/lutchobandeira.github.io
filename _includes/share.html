@@ -1,0 +1,6 @@
+<div class="share-buttons">
+  <h3>{{ site.t[page.lang].share_title }}</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-text="{{page.title}}" data-url="{% if page.short_url%}{{page.short_url}}{% else %}{{site.url}}{{page.url}}{% endif %}" data-via="lutchobandeira" data-lang="{{page.lang}}" data-show-count="false">Tweet</a>
+
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>

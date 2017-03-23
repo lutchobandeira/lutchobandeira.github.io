@@ -2,6 +2,7 @@
 layout: post
 title: How to implement a news feed in React.js - Part 1
 thumbnail: /images/react-part-1.png
+short_url: https://goo.gl/66sykq
 ref: react_1
 lang: en
 ---
