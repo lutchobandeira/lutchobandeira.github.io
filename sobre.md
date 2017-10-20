@@ -6,4 +6,8 @@ ref: about
 lang: pt
 ---
 
-Sou um desenvolvedor de software de Fortaleza. Criei este blog com o objetivo de compartilhar minhas experiências com os projetos em que trabalho. Espero que gostem! Até mais!
+Olá! Sou Luciano, desenvolvedor Ruby e React de Fortaleza. Meu objetivo com este blog é compartilhar minhas experiências e quem sabe ajudar outros devs a aprenderem algo novo.
+
+Sinta-se a vontade para falar comigo pelo [Twitter](https://www.twitter.com/lutchobandeira) ou pelo [LinkedIn](https://www.linkedin.com/in/lucianobandeira).
+
+Até mais e *happy coding*!

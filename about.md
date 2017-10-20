@@ -6,4 +6,8 @@ ref: about
 lang: en
 ---
 
-I am a software developer located in Fortaleza, Brazil. I created this blog in order to share with you experiences from the projects I am working on. I hope you enjoy it! See you!
+Hi! I am Luciano, a Ruby and React developer located in Fortaleza, Brazil. My goal with this blog is to share my experiences and possibly help others to learn something new.
+
+Fell free to get in contact via [Twitter](https://www.twitter.com/lutchobandeira) or [LinkedIn](https://www.linkedin.com/in/lucianobandeira).
+
+See you and happy coding!

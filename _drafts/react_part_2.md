@@ -137,11 +137,17 @@ Pronto!
 Como consumir uma API a partir do React
 ---------------------------------------
 
+Antes de começar, vamos navegar para a pasta do projeto React e iniciar o servidor:
+
+``` bash
+$ npm start
+```
+
 No mundo javascript há inúmeras maneiras de fazer requisições HTTP, [como você pode ver neste artigo](https://hashnode.com/post/5-best-libraries-for-making-ajax-calls-in-react-cis8x5f7k0jl7th53z68s41k1).
 
-Neste post vamos utilizar a [Fetch API](https://developer.mozilla.org/pt-BR/docs/Web/API/Fetch_API/Using_Fetch), que já disponível a pardir do Firefox 39 e do Chrome 42.
+Neste post vamos utilizar a [Fetch API](https://developer.mozilla.org/pt-BR/docs/Web/API/Fetch_API/Using_Fetch), que já está disponível a partir do Firefox 39 e do Chrome 42.
 
-A Fetch API fornece o método ```fetch()```, que tem um argumento obrigatório, a URL do recurso que queremos acessar, e retorna uma [Promisse](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Promise) com a resposta.
+A Fetch API fornece o método ```fetch()```, que possui somente um argumento obrigatório, a URL do recurso que queremos acessar, e retorna uma [Promisse](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Promise) com a resposta.
 
 Vamos começar adicionando o método ```fetchPosts()``` ao component ```Feed```:
 
@@ -249,7 +255,10 @@ const categories = ['world', 'business', 'tech', 'sport'];
 Exibindo erros de validação
 ---------------------------
 
-Mas e se tivermos erros de validação? Nesse caso, seria interessante exibir o erro de validação ao lado do campo correspondente e retirar da lista de posts o post que adicionamos otimisticamente.
+Mas e se tivermos erros de validação? Nesse caso, seria interessante:
+
+- exibir o erro de validação ao lado do campo correspondente;
+- retirar da lista de posts o novo post que adicionamos otimisticamente.
 
 Vamos começar alterando o método ```handleNewPost()```:
 
@@ -282,7 +291,7 @@ Vamos começar alterando o método ```handleNewPost()```:
   }
 </code></pre>
 
-Observe as 65 a 74, nelas escrevemos o código que trata os erros. Lembre-se que a API Rails retorna uma lista de erros caso o modelo tenha erros de validação. Se tivermos erros de validação, atualizamos o estado com a lista de erros e resetamos a lista de posts (linhas 67 e 68).
+Observe as linhas 65 a 74. Nelas escrevemos o código que trata os erros. Lembre-se que a API Rails retorna uma lista de erros caso o modelo tenha erros de validação. Se tivermos erros de validação, atualizamos o estado com a lista de erros e resetamos a lista de posts (linhas 67 e 68).
 
 Nas linhas 52 e 53 guardamos a lista corrente de posts, para ser utilizada em caso de erros da validação, e passamos ```this``` para a variável ```context```. Esse é um truque para usar a referência ```this``` de ```Feed``` dentro do callback.
 
