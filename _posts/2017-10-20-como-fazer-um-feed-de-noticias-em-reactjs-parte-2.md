@@ -149,7 +149,7 @@ Neste post vamos utilizar a [Fetch API](https://developer.mozilla.org/pt-BR/docs
 
 A Fetch API fornece o método ```fetch()```, que possui somente um argumento obrigatório, a URL do recurso que queremos acessar, e retorna uma [Promisse](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Promise) com a resposta.
 
-Vamos começar adicionando o método ```fetchPosts()``` ao component ```Feed```:
+Vamos começar adicionando o método ```fetchPosts()``` ao componente ```Feed```:
 
 ``` jsx
 fetchPosts() {
@@ -168,7 +168,7 @@ Utilizando os lifecycle methods do React
 
 Os componentes do React tem vários [métodos de ciclo de vida](https://reactjs.org/docs/react-component.html) (lifecycle methods) que podemos sobrescrever quando queremos rodar um código específico, como uma chamada a uma API, em determinado momento.
 
-Vamos sobrescrever ```componentWillMount()``` para fazer nossa requisição. Esse método roda quando o componente está sendo montado, antes da chamada a ```render()```:
+Vamos sobrescrever ```componentWillMount()``` para fazer nossa requisição. Esse método roda antes da montagem do componente, antes da chamada a ```render()```:
 
 ``` jsx
 componentWillMount() {
