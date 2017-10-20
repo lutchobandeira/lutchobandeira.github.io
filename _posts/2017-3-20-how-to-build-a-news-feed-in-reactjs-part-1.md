@@ -1075,5 +1075,5 @@ Next steps
 
 Our news feed is still not very useful. It only shows news created by the user. To make it really interesting, we have to implement the server side.
 
-And that's what we'll do in the next blog post. We'll create an application in Ruby on Rails that will communicate with our news feed. Wait for it!
+And that's what we'll do in the [next blog post](http://lutchobandeira.com/how-to-build-a-news-feed-in-reactjs-part-2/). We'll create an application in Ruby on Rails that will communicate with our news feed.
 

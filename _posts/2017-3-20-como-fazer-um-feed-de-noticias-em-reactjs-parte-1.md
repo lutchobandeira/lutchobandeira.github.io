@@ -1070,4 +1070,4 @@ Próximos passos
 
 Nosso feed de notícias ainda não é muito útil. Ele somente mostra notícias criadas pelo próprio usuário. Para deixá-lo realmente interessante, temos que implementar o lado do servidor.
 
-E é isso o que faremos no próximo post do blog. Criaremos uma aplicação em Ruby on Rails que se comunicará com nosso feed de notícias. Aguarde!
+E é isso o que faremos no [próximo post do blog](http://lutchobandeira.com/how-to-build-a-news-feed-in-reactjs-part-2/). Criaremos uma aplicação em Ruby on Rails que se comunicará com nosso feed de notícias. Aguarde!
