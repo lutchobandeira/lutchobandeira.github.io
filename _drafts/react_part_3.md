@@ -38,18 +38,13 @@ Esse estado precisa ser armazenado em algum lugar, certo? Quem armazena esse est
 
 Cada aplicação Redux possui somente uma **store** e através dela conseguimos acessar todo o estado da aplicação. Pense no estado como um banco de dados, onde armazenamos tudo o que é importante para a aplicação.
 
-Observe que o objeto javascript que representa o estado da aplicação possui duas chaves: ```user``` e ```posts```.
+Mas como alterar o estado do Redux?
 
-O Redux precisa saber como atribuir valores para essas chaves, certo?
+Cada atributo do estado é atualizado através um **reducer**! O **reducer** uma função que sabe como atualizar o estado.
 
-E como ele faz isso?
+Se para alterar o estado precisamos de um **reducer**, para rodar um um **reducer** precisamos despachar uma **action**.
 
-Através de **reducers**! Um **reducer** é uma função que sabe como atualizar o estado. Mais na frente vamos escrever o ```userReducer``` e o ```postReducer```, que serão responsáveis por atualizar ```user``` e ```posts```.
-
-Os reducers sabem *como* o estado deve ser atualizado. Para saber *o que* deve ser atualizado, precisamos de uma  ação, ou **action**.
-
-**Actions** são objetos javascript que descrevem o que aconteceu na aplicação. Por exemplo, se o usuário logou com sucesso no sistema, podemos escrever a seguinte ação, que possui tipo e dados:
-
+**Actions** descrevem o que aconteceu na aplicação. Por exemplo, se o usuário logou com sucesso no sistema, podemos escrever a seguinte ação, um objeto que  possui os atributos tipo e dados:
 
 ``` javascript
 {
@@ -65,9 +60,79 @@ Esses são os conceitos básicos do Redux! Para modificarmos o estado da aplica�
 
 Vamos aprender agora como utilizar a API do Redux para colocar tudo isso para funcionar. Perceba que até agora ainda não escrevemos nenhum código além de objetos javascript simples.
 
-Próximos Passos
----------------
+Utilizando a API do Redux
+-------------------------
 
-Nosso código funciona, mas parece que o componente ```Feed``` está fazendo coisas demais. Além de ter a responsabilidade de cuidar de seu estado e de suas propriedades, o componente se preocupa em fazer requisições a um servidor externo.
+Como falei anteriormente, o **reducer** sabe como atualizar o estado. Uma coisa interessante é que cada reducer é responsável por atualizar uma parte do estado!
 
-No próximo post vamos aprender como gerenciar os dados de nossa aplicação React com [redux](http://redux.js.org/). Até lá!
+Precisamos de um reducer para atualizar ```user``` e outro para atualizar ```posts```.
+
+A primeira função do Redux que vamos utilizar é a ```combineReducers```, uma função auxiliar do Redux que faz o link entre os reducers da aplicação com partes independentes do estado.
+
+Segue o arquivo ```reducers/index.js```:
+
+``` javascript
+import { combineReducers } from 'redux';
+
+export default combineReducers({
+  user: UserReducer,
+  posts: PostsReducer,
+});
+```
+
+Um rascunho do ```UserReducer``` fica mais ou menos assim, no arquivo ```reducers/UserReducer.js```:
+
+``` javascript
+export default (state, action) => {
+  // logic to create newState here
+  return newState
+};
+```
+
+O reducer recebe a parte do estado que ele gerencia e uma ação, e retorna um novo estado.
+
+O ```state``` corresponde ao último estado que a função retornou. Na primeira execução o ```state``` não vai possuir um valor. Então é interessante criar um valor inicial:
+
+``` javascript
+const initialState = {
+  email: null,
+  displayName: 'Anonimous User',
+};
+
+export default (state = initialState, action) => {
+  // logic to create newState here
+  return newState
+};
+```
+
+Uma coisa que nunca podemos fazer no reducer é modificar seus argumentos. Logo devemos realmente retornar um novo objeto, ao invés de reaproveitar ```state```:
+
+``` javascript
+import {
+  LOGIN_SUCCESSFULLY,
+} from '../actions/types';
+
+const initialState = {
+  email: '',
+  displayName: 'Anonimous User',
+  error: '',
+};
+
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case LOGIN_SUCCESSFULLY:
+      return {
+          ...state,
+          email: action.payload.email,
+          displayName: action.payload.displayName
+        };
+    default:
+      return state;
+  }
+};
+```
+
+Utilizamos o spread operator do ES6 para criar um novo objeto a partir de ```state``` e sobrescrever alguns atributos.
+
+E agora vamos para as ações.
+
