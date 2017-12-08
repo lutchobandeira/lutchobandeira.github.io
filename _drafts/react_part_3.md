@@ -225,29 +225,74 @@ createStore(reducer, [preloadedState], [enhancer])
 Por enquanto, vamos utilizar somente o primeiro argumento:
 
 ``` javascript
+import { createStore } from 'redux';
 import reducers from '.reducers';
 
 const store = createStore(reducers)
+
+// integration with some framework here
 ```
 
-Com a variável ```store``` podemos fazer a integração do Redux com o framework javascript que estivermos utilizando.
+Com a variável ```store``` podemos fazer a integração do Redux com o framework javascript que estivermos 
+utilizando.
 
-Por exemplo, para integrar com React, o código fica assim:
+Para integrar com o React, por exemplo, utilizamos a lib [react-redux](https://github.com/reactjs/react-redux).
+
+Depois de feita a integração, não lidamos mais diretamente com a ```store```. No próximo post vou explicar em mais detalhes a integração do Redux com React e disponibilizar o código fonte.
+
+A função ```createStore``` também é utilizada para integrar com middlewares de terceiros.
+
+Por exemplo, para implementar chamadas de API assíncronas, uma lib muito interessante é a [redux-thunk](https://github.com/gaearon/redux-thunk), que é um middleware utilizado para atrasar o despacho de uma ação. Segue a configuração:
 
 ``` javascript
-import React from 'react';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import reducers from './reducers';
+import { createStore, applyMiddleware } from 'redux';
+import reducers from '.reducers';
+import ReduxThunk from 'redux-thunk';
 
-const store = createStore(reducers)
+const store = createStore(
+  reducers,
+  {},
+  applyMiddleware(ReduxThunk)
+);
 
-export default class App extends React.Component {
-  render() {
-    <Provider store={store}>
-      <SubComponent />
-    </Provider>
-  }
-}
+// integration with some framework here
 ```
 
+```applyMiddleware``` é um enchancer que vem com o Redux, utilizado exatamente para fazer integrações com libs de terceiros.
+
+Por último, modificamos nosso action creator para utilizar o **redux-thuk**:
+
+``` javascript
+import {
+  LOGIN_USER,
+  LOGIN_SUCCESSFULLY,
+  LOGIN_USER_FAIL,
+  LOGED_OUT
+} from 'types';
+
+export const login = (email, password) => {
+  return (dispatch) => {
+    dispatch({ type: LOGIN_USER });
+
+    loginWithApi(email, password)
+      .then(user => {
+        dispatch({ type: LOGIN_USER_SUCCESS, payload: user});
+      })
+      .catch((e) => {
+        dispatch({ type: LOGIN_USER_FAIL });
+      });
+  };
+};
+
+export const logout = () => {
+  return { type: LOGED_OUT };
+};
+```
+
+Modificamos a função ```login``` para retornar uma função que cria uma ação ao invés de retornar uma ação diretamente. Essa é a sacada do **redux-thuk**, pois desta maneira conseguimos atrasar o despacho da ação.
+
+As ações comunicam o que acontece no sistema, lembra?
+
+No código acima, comunicamos quando o usuário resolveu fazer o login, com a ação do tipo ```LOGIN_USER``` e depois despachamos ```LOGIN_USER_SUCCESS``` ou ```LOGIN_USER_FAIL```, de acordo com a resposta da API.
+
+Com isso podemos fazer coisas legais, como mostrar um "carragando" entre o início e o fim da chamada de API.
