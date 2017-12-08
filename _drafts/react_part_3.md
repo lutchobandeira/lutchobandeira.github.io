@@ -7,9 +7,7 @@ ref: react_3
 lang: pt
 ---
 
-Redux é um container de estado previsível para apps javascript. Essa é a forma como o framework é descrito em sua [documentação](http://redux.js.org/).
-
-O Redux é simples. Isso é ressaltado em todo site, blog, vídeo que fala sobre Redux. No meu caso pessoal, achei que a terminologia utilizada pode assustar um pouco. Nomes como **actions**, **reducers** e **store**, por exemplo.
+Redux é um container de estado previsível para apps javascript. O Redux é simples. Todo site, blog, vídeo que fala sobre Redux ressalta sua simplicidade. No meu caso pessoal, achei que a terminologia utilizada pode confudir um pouco. Nomes como **actions**, **reducers** e **store**, por exemplo.
 
 O criador do Redux escreveu em seu Twitter que a revolução do javascript não é sobre os frameworks, mas sim sobre como gerenciamos dados.
 
@@ -67,7 +65,7 @@ Como falei anteriormente, o **reducer** sabe como atualizar o estado. Uma coisa 
 
 Precisamos de um reducer para atualizar ```user``` e outro para atualizar ```posts```.
 
-A primeira função do Redux que vamos utilizar é a ```combineReducers```, uma função auxiliar do Redux que faz o link entre os reducers da aplicação com partes independentes do estado.
+A primeira função da API do Redux que vamos utilizar é a ```combineReducers```, uma função auxiliar que faz o link entre os reducers da aplicação com partes independentes do estado.
 
 Segue o arquivo ```reducers/index.js```:
 
@@ -91,7 +89,7 @@ export default (state, action) => {
 
 O reducer recebe a parte do estado que ele gerencia e uma ação, e retorna um novo estado.
 
-O ```state``` corresponde ao último estado que a função retornou. Na primeira execução o ```state``` não vai possuir um valor. Então é interessante criar um valor inicial:
+O argumento ```state``` contém último estado que a função retornou, ou o estado anterior. Na primeira execução o ```state``` não vai possuir um valor. Então é interessante criar um valor inicial:
 
 ``` javascript
 const initialState = {
@@ -132,7 +130,124 @@ export default (state = initialState, action) => {
 };
 ```
 
-Utilizamos o spread operator do ES6 para criar um novo objeto a partir de ```state``` e sobrescrever alguns atributos.
+Utilizamos o [spread operator](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Operators/Spread_operator) do ES6 para criar uma cópia do objeto ```state``` e popular alguns atributos. Atributos novos são adicionados e atributos existentes são sobrescritos.
 
-E agora vamos para as ações.
+A imutabilidade é uma característica importante para alcançar a previsibilidade do Redux. Se você se encontrar em um cenário mais complexo, recomendo utilizar uma lib como o [Immutable.js](https://facebook.github.io/immutable-js/) para isso.
+
+Já discutimos anteriormente sobre a ação que deve ser despachada para atualizar o estado ```user```.
+
+O que escrevemos abaixo é uma função que retorna a ação que queremos despachar, também conhecida como **action creator**:
+
+
+``` javascript
+import {
+  LOGIN_SUCCESSFULLY,
+} from 'types';
+
+export const login = (email, password) => {
+  // we should replace this by an API call
+  const user = { email, displayName: 'Jhon Doe' }
+  return {
+    type: LOGIN_SUCCESSFULLY,
+    payload: user
+  };
+};
+```
+
+O melhor lugar para fazer chamadas de API é aqui. Os reducers devem ser bem sucintos e diretos, sem surpresas.
+
+Mais na frente vamos voltar a esse código para implementar uma chamada de API assíncrona. Vamos deixar assim por enquanto.
+
+Se a gente quiser implementar o log out, a lógica é bem parecida:
+
+``` javascript
+import {
+  LOGIN_SUCCESSFULLY,
+  LOGED_OUT
+} from 'types';
+
+export const login = (email, password) => {
+  // we should replace this by an API call
+  const user = { email, displayName: 'Jhon Doe' }
+  return {
+    type: LOGIN_SUCCESSFULLY,
+    payload: user
+  };
+};
+
+export const logout = () => {
+  return { type: LOGED_OUT };
+};
+```
+
+E o reducer:
+
+``` javascript
+import {
+  LOGIN_SUCCESSFULLY,
+  LOGED_OUT
+} from '../actions/types';
+
+const initialState = {
+  email: '',
+  displayName: 'Anonimous User',
+  error: '',
+};
+
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case LOGIN_SUCCESSFULLY:
+      return {
+          ...state,
+          email: action.payload.email,
+          displayName: action.payload.displayName
+        };
+    case LOGED_OUT:
+      return {
+        ...state,
+        email: initialState.email,
+        displayName: initialState.displayName
+      };
+    default:
+      return state;
+  }
+};
+```
+
+Vamos conhecer mais sobre a API do Redux.
+
+A função que cria a **store**, que é responsável por manter o estado, é chamada **createStore** e tem a seguinte assinatura:
+
+``` javascript
+createStore(reducer, [preloadedState], [enhancer])
+```
+
+Por enquanto, vamos utilizar somente o primeiro argumento:
+
+``` javascript
+import reducers from '.reducers';
+
+const store = createStore(reducers)
+```
+
+Com a variável ```store``` podemos fazer a integração do Redux com o framework javascript que estivermos utilizando.
+
+Por exemplo, para integrar com React, o código fica assim:
+
+``` javascript
+import React from 'react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import reducers from './reducers';
+
+const store = createStore(reducers)
+
+export default class App extends React.Component {
+  render() {
+    <Provider store={store}>
+      <SubComponent />
+    </Provider>
+  }
+}
+```
 
