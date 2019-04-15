@@ -7,9 +7,9 @@ ref: react_3
 lang: pt
 ---
 
-Redux é um container de estado previsível para apps javascript. O Redux é simples. Todo site, blog, vídeo que fala sobre Redux ressalta sua simplicidade. No meu caso pessoal, achei que a terminologia utilizada pode confundir um pouco. Nomes como **actions**, **reducers** e **store**, por exemplo.
+Redux é um container de estado previsível para apps javascript. O Redux é simples, mas no meu caso pessoal, achei que a terminologia utilizada pode confundir um pouco. Nomes como **actions**, **reducers** e **store**, por exemplo.
 
-A grande inovação no desenvolvimento frontend não está no nível de componentes, mas no nível de gerenciamento de estado, segundo Max Lynch, cofundador do Ionic e poliglota em frameworks e linguagens de programação. Ele escreveu [um post bem interessante sobre Redux]() sobre Redux, citando também alguns benefícios, como a redução da quantidade de bugs por centralizar o gerenciamento de estado e a possibilidade de escrever componentes puros.
+A grande inovação no desenvolvimento frontend não está no nível de componentes, mas no nível de gerenciamento de estado, segundo Max Lynch, cofundador do Ionic e poliglota em frameworks e linguagens de programação. Ele escreveu [um post bem interessante sobre Redux](https://medium.com/@maxlynch/redux-is-the-pivotal-frontend-innovation-a406736552cb), citando também alguns benefícios, como a redução da quantidade de bugs por centralizar o gerenciamento de estado e a possibilidade de escrever componentes puros.
 
 Descomplicando conceitos
 ------------------------
@@ -38,11 +38,14 @@ Esse estado precisa ser armazenado em algum lugar, certo? Quem armazena esse est
 
 Cada aplicação Redux possui somente uma **store** e através dela conseguimos acessar todo o estado da aplicação.
 
-Mas como alterar o estado do Redux?
+Mas como atualizar o estado do Redux?
 
-Para demonstrar a intenção de alterar o estado devemos despachar uma **ação**. No geral depachamos ações quando alguma coisa acontece na aplicação, como um clique em um botão ou quando obtemos a resposta de uma chamada de API.
+O primeiro passo é despachar uma **ação**. As ações do Redux servem para comunicar que algo ocorreu na aplicação, como um clique em um botão, por exemplo.
 
-Por exemplo, se o usuário logou com sucesso no sistema, podemos despachar a seguinte ação, um objeto que possui um atributo ```type``` para representar o tipo da ação e um atributo ```payload``` para armazenar os dados que queremos introduzir no estado da aplicação:
+A ação é simplesmente um objeto javascript que possui um atributo ```type``` para representar o tipo da ação e um atributo ```payload``` com os dados que queremos introduzir no estado da aplicação.
+
+Por exemplo, se o usuário logou com sucesso no sistema, podemos despachar a ação abaixo:
+
 
 ``` javascript
 {
@@ -53,6 +56,7 @@ Por exemplo, se o usuário logou com sucesso no sistema, podemos despachar a seg
   }
 }
 ```
+
 
 Ao despachar essa ação explicitamos a intenção de alterar o estado da aplicação. Então, para materializar esse nosso desejo, precisamos de um **reducer**, uma função que sabe como atualizar o estado.
 
@@ -89,7 +93,7 @@ export default (state, action) => {
 };
 ```
 
-O reducer é uma função que recebe dois argumentos (a parte do estado que ele gerencia e uma ação), e retorna um novo estado.
+O reducer é uma função que recebe dois argumentos (a parte do estado que ele gerencia e uma ação), e retorna um **novo estado**. Isso é muito importante! Sempre vamos retornar um novo objeto ao invés de modificar o ```state```.
 
 O argumento ```state``` contém último estado que a função retornou, ou seja, o estado anterior. Na primeira execução o ```state``` não vai possuir um valor. Então é interessante criar um valor inicial:
 
@@ -136,7 +140,7 @@ export default (state = initialState, action) => {
 
 Utilizamos o [spread operator](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Operators/Spread_operator) do ES6 para criar uma cópia do objeto ```state``` e popular alguns atributos. Atributos novos são adicionados e atributos existentes são sobrescritos.
 
-A imutabilidade é uma característica importante para alcançar a previsibilidade do Redux. Se você se encontrar em um cenário mais complexo, recomendo utilizar uma lib como o [Immutable.js](https://facebook.github.io/immutable-js/) para isso.
+A imutabilidade é uma característica importante para alcançar a previsibilidade do Redux.
 
 Vamos falar agora sobe como criar ações.
 
@@ -163,12 +167,12 @@ export const login = (email, password) => {
 
 Mais na frente vamos voltar a esse código para implementar uma chamada de API assíncrona. Vamos deixar assim por enquanto.
 
-Se a gente quiser implementar o log out, a lógica é bem parecida:
+Se a gente quiser implementar o logout, a lógica é bem parecida:
 
 <pre class="line-numbers" data-start="1" data-line="15-17"><code class="language-jsx">
 import {
   LOGIN_SUCCESSFULLY,
-  LOGED_OUT
+  LOGGED_OUT
 } from 'types';
 
 export const login = (email, password) => {
@@ -181,7 +185,7 @@ export const login = (email, password) => {
 };
 
 export const logout = () => {
-  return { type: LOGED_OUT };
+  return { type: LOGGED_OUT };
 };
 </code></pre>
 
@@ -190,7 +194,7 @@ E o reducer:
 <pre class="line-numbers" data-start="1" data-line="20-25"><code class="language-jsx">
 import {
   LOGIN_SUCCESSFULLY,
-  LOGED_OUT
+  LOGGED_OUT
 } from '../actions/types';
 
 const initialState = {
@@ -207,7 +211,7 @@ export default (state = initialState, action) => {
           email: action.payload.email,
           displayName: action.payload.displayName
         };
-    case LOGED_OUT:
+    case LOGGED_OUT:
       return {
         ...state,
         email: initialState.email,
@@ -360,7 +364,7 @@ Passamos a utilizar os atributos ```error``` e ```loading```.
 Conclusão
 ---------
 
-Neste post vimos os principais conceitos do Redux. Uma dúvida que tive quando comecei a utilizar Redux foi: "Por que mesmo utilizar o Redux? Poderia modificar o estado diretamente. Para que criar ações, reducers, etc?".
+Neste post vimos os principais conceitos do Redux. Uma dúvida que tive quando comecei a utilizar Redux foi: "Por que mesmo utilizar o Redux? Eu poderia modificar o estado diretamente. Para que criar ações, reducers, etc?".
 
 A resposta para isso vem quando integramos o Redux ao nosso framework javascript. Os componentes ficam muito mais limpos, com código muito mais fácil de ser mantido. O Redux traz ao nosso projeto mais previsibilidade, e com isso conseguimos diminuir a quantidade de bugs.
 
