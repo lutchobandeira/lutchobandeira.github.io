@@ -1,15 +1,15 @@
 ---
 layout: post
-title: Understanding Redux
+title: Introduction to Redux and its role in modern javascript frameworks such as React and Angular
 thumbnail: /images/react-part-1.png
 short_url: https://goo.gl/nJmg14
 ref: react_3
 lang: en
 ---
 
-Redux is a predictable state container for javacript apps. Redux is simple, however I found that its terminology may be a bit confusing. Names like **actions**, **reducers** and **store**, for example.
+Redux is a predictable state container for javascript apps. Redux is simple, however I found that its terminology may be a bit confusing. Names like **actions**, **reducers** and **store**, for example.
 
-The biggest innovation in frontend development isn't at the component level, but at the state management, according to Max Lynch, co-founder of Ionic and a polyglot in frameworks and programming languages. He wrote [a interesting post about Redux](https://medium.com/@maxlynch/redux-is-the-pivotal-frontend-innovation-a406736552cb), metioning some Rudux benefits, like bugs reduction by centralizing state management and the possibility of writing pure components.
+The co-founder of Ionic and a polyglot in frameworks and programming languages, Max Lynch, quoted in his blog that the biggest innovation in frontend development isn't at the component level, but at the state management level. He wrote [an interesting post about Redux](https://medium.com/@maxlynch/redux-is-the-pivotal-frontend-innovation-a406736552cb), mentioning some of its benefits, like bugs reduction by centralizing state management and the possibility of writing pure components.
 
 Making concepts simpler
 -----------------------
@@ -36,17 +36,15 @@ In a Redux app, the state is represented by a plain old javascript object:
 
 This state needs to be saved somewhere, right? Who holds this state, by Redux terminology, is the **store**.
 
-Every Redux application has only one **store** and we can access all the aplication state through it.
+Every Redux application has only one **store** and we can access all the application state through it.
 
 But how to update Redux state?
 
-O primeiro passo é despachar uma **ação**. As ações do Redux servem para comunicar que algo ocorreu na aplicação, como um clique em um botão, por exemplo.
+The first step is to dispatch an **action**. Redux actions are used to communicate that something happened at the application, such as clicks on buttons, form submissions, receiving API response,  and so on.
 
-The first step is to dispatch an **action**. Redux actions are used to communicate that something happened at the application, like a click on a button, for example.
+The action is simply a javascript object that has an attribute ```type``` to represent the type of the action and an attribute ```payload``` to hold the data we want to introduce in the application state.
 
-The action is simply a javascript object that has an attribute ```type``` to represent the type of the action and an attribute ```payload``` to hold the data we want to introduce in the aplication state.
-
-For example, if the user has successfuly logged in the system, we can dispatch the following action:
+For example, if the user has successfully logged in the system, we can dispatch the following action:
 
 
 ``` javascript
@@ -59,22 +57,20 @@ For example, if the user has successfuly logged in the system, we can dispatch t
 }
 ```
 
-Upon dispatching this action, we make out intent to update the application state clear. So to materialize this desire we need a **reducer**, a function that knows hot to update the state.
+Upon dispatching this action, we make clear our intent to update the application state. So in order to materialize this desire we need a **reducer**, a function that knows how to update the state.
 
-To put all the keywords in the same sentence: In order to update the application state, which is hold by the **store**, we need to dispatch an **action**, that is processed by a function that knows how to update state, the **reducer**.
+Putting the words in the same sentence: In order to update the application state, which is hold by the **store**, we need to dispatch an **action**, that is processed by a function that knows how to update state, the **reducer**.
 
-Let's learn how to use the Redux API in order to make all that to work. Note that we haven't write any code rather than plain old javascript objects until now.
+Let's learn how to use the Redux API in order to put all that to work. Note that we haven't written any code rather than plain old javascript objects until now.
 
 Reducers to update state
 ------------------------
 
-Como falei anteriormente, o **reducer** sabe como atualizar o estado. Uma coisa interessante é que cada reducer é responsável por atualizar uma parte do estado!
-
-As I said previously, the **reducer** knows how to update state. It's interesting to note that every reducer is accountable to update a specific part of the state!
+As I said previously, the **reducer** knows how to update state. It's interesting to note that every reducer is responsible to update a specific part of the state!
 
 In our example, we need a reducer to update ```user``` and another one to update ```posts```.
 
-The first function of Redux API that we will use is ```combineReducers```, a helper functon that binds each reducer to the part of state it is accountable for.
+The first function of Redux API that we will use is ```combineReducers```, a helper function that binds each reducer to the part of state it is accountable for.
 
 The file ```reducers/index.js``` is following:
 
@@ -96,14 +92,14 @@ export default (state, action) => {
 };
 ```
 
-The reducer is a function that takes two arguments (the state that it manages and an action), and returns a **new state**. This is very important! We will always return a new object rather than changing ```state```.
+The reducer is a function that takes two arguments (the state it manages and an action), and returns a **new state**. This is very important! We will always return a new object rather than changing ```state```.
 
 The argument ```state``` holds the last state returned by the function, in other words, the previous state. It is interesting then to assign an initial value:
 
 <pre class="line-numbers" data-start="1" data-line="1-4,6"><code class="language-jsx">
 const initialState = {
   email: null,
-  displayName: 'Anonimous User',
+  displayName: 'Anonymous User',
 };
 
 export default (state = initialState, action) => {
@@ -112,7 +108,7 @@ export default (state = initialState, action) => {
 };
 </code></pre>
 
-A thing we never can do is to change its arguments. Reducers should be very succinct and direct, no surprises. Therefore, we must avoid making API calls or use non-pure functions like ```Date.now()``` and ```Math.random()``` inside reducers.
+A thing we must never do is to change its arguments. Reducers should be very succinct and direct, no surprises. Therefore, we must avoid making API calls or use non-pure functions like ```Date.now()``` and ```Math.random()``` inside reducers.
 
 Therefore, we really must to return a new object rather than reuse the variable ```state```:
 
@@ -123,7 +119,7 @@ import {
 
 const initialState = {
   email: '',
-  displayName: 'Anonimous User',
+  displayName: 'Anonymous User',
   error: '',
 };
 
@@ -143,14 +139,14 @@ export default (state = initialState, action) => {
 
 We have used the [spread operator](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Operators/Spread_operator) of ES6 to create a copy of the object ```state``` and populate some of its attributes. New attributes are added and existing attributes are overwritten.
 
-Immutability is an important feture in order to achieve the predictability of Redux.
+Immutability is an important feature in order to achieve the predictability of Redux.
 
 Let's talk now about how to create actions.
 
 How to create actions
 ---------------------
 
-Let's write a function that returns an action we want to dispatch, also known as **action creator**.
+Let's write a function that returns the action we want to dispatch, also known as **action creator**.
 
 
 <pre class="line-numbers" data-start="1" data-line=""><code class="language-jsx">
@@ -170,7 +166,7 @@ export const login = (email, password) => {
 
 We will come back to this code later on to implement an asynchronous API call. Let's leave the code this way for a while.
 
-If we want to implement logout, the logic is very similar:
+If we want to implement logout functionality, the logic is very similar:
 
 <pre class="line-numbers" data-start="1" data-line="15-17"><code class="language-jsx">
 import {
@@ -202,7 +198,7 @@ import {
 
 const initialState = {
   email: '',
-  displayName: 'Anonimous User',
+  displayName: 'Anonymous User',
   error: '',
 };
 
@@ -231,7 +227,7 @@ Putting Redux to work
 
 Let's learn more about Redux API.
 
-The function that creates a **store**, which is accountable for holding the state, is called **createStore** and has the following structure:
+The function that creates a **store**, which is responsible for holding the state, is called **createStore** and has the following structure:
 
 ``` javascript
 createStore(reducer, [preloadedState], [enhancer])
@@ -248,11 +244,11 @@ const store = createStore(reducers)
 // integration with some framework here
 ```
 
-With the variable ```store``` we can implement the integration between Redux and the javascript framework we use.
+Having the variable ```store``` we can implement the integration between Redux and the javascript framework we use.
 
 To integrate with React, for example, we use the lib [react-redux](https://github.com/reactjs/react-redux).
 
-Once the integration is done, we don't handle ```store``` directly. The library we used for the integratin, like **react-redux**, becomes responsible for dealing with the **store**, so we don't need to be concerned about that.
+Once the integration is done, we don't handle ```store``` directly. The library we used for the integration, like **react-redux**, becomes responsible for dealing with the **store**, so we don't need to be concerned about that.
 
 Integrating with ```redux-thunk``` to make asynchronous calls
 -------------------------------------------------------------
@@ -275,11 +271,11 @@ const store = createStore(
 // integration with some framework here
 ```
 
-```applyMiddleware``` is an enchancer built in Redux, used exactly to implement integrations with third-party libs.
+```applyMiddleware``` is an enhancer built in Redux, used exactly to implement integrations with third-party libs.
 
 The next step to to change the way we return the action from the action creator.
 
-The idea of using **redux-thuk** is to make action creator return a function that creates a function, rather than returning the function directly.
+The idea of using **redux-thuk** is to **make action creator return a function that creates an action**, rather than returning the action directly.
 
 The draft of the action creator of ```login``` with redux-thuk looks like that:
 
@@ -291,9 +287,9 @@ export const login = () => {
 };
 ```
 
-The function ```login``` returns now a function that has the argument ```dispatch```. We use the function ```dispatch``` to dispatch the action when we are done. This give us a lot of flexibility.
+The function ```login``` returns now a function that receives ```dispatch``` as argument. We use the function ```dispatch``` to dispatch the action when we are done. This give us a lot of flexibility.
 
-The actions communicate what is going on the system, remember? We could dispatch an action to tell when an user has started his login process and another one to tell when the loggin process has finished with success or with failure.
+Actions are used to communicate what is going on the system, remember? We could dispatch an action to tell when an user has started his login process and another one to tell when the login process has finished with success or with failure.
 
 The code looks like that:
 
@@ -322,12 +318,12 @@ We need to change the reducer to implement this:
 <pre class="line-numbers" data-start="1" data-line=""><code class="language-jsx">
 import {
   LOGIN_SUCCESSFULLY,
-  LOGED_OUT
+  LOGGED_OUT
 } from '../actions/types';
 
 const initialState = {
   email: '',
-  displayName: 'Anonimous User',
+  displayName: 'Anonymous User',
   error: '',
   loading: false,
 };
@@ -349,7 +345,7 @@ export default (state = initialState, action) => {
         error: action.payload.errorMessage,
         loading: false,
       };
-    case LOGED_OUT:
+    case LOGGED_OUT:
       return {
         ...state,
         email: initialState.email,
@@ -363,11 +359,11 @@ export default (state = initialState, action) => {
 
 We have introduced the attributes ```error``` and ```loading```.
 
-Conclusão
----------
+Conclusion
+----------
 
-Neste post vimos os principais conceitos do Redux. Uma dúvida que tive quando comecei a utilizar Redux foi: "Por que mesmo utilizar o Redux? Eu poderia modificar o estado diretamente. Para que criar ações, reducers, etc?".
+In this post we talked about the main concepts of Redux. A question I had when I started using Redux was: "Do I really need to use Redux? I could change state directly. Why create actions, reducers, etc?".
 
-A resposta para isso vem quando integramos o Redux ao nosso framework javascript. Os componentes ficam muito mais limpos, com código muito mais fácil de ser mantido. O Redux traz ao nosso projeto mais previsibilidade, e com isso conseguimos diminuir a quantidade de bugs.
+The answer to that comes when we integrate Redux with the javascript framework we use. Components become cleaner, with code much more easier to be maintained. Redux brings more predictability to our project, and this way we manage to reduce the amount of bugs.
 
-No próximo post vou explicar em mais detalhes a integração do Redux com React e disponibilizar o código fonte. Vamos ver na prática as vantagens do Redux, e explorar ainda mais sua API. Até lá!
+In the next blog post I will show how to integrate Redux and React and share the source code. Let's take a look at the advantages of Redux, and explore its API. See you there!

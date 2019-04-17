@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Entendendo o Redux
+title: Introdução ao Redux e o seu papel perante frameworks javascript modernos como React e Angular
 thumbnail: /images/react-part-1.png
 short_url: https://goo.gl/nJmg14
 ref: react_3
@@ -9,7 +9,7 @@ lang: pt
 
 Redux é um container de estado previsível para apps javascript. O Redux é simples, mas no meu caso pessoal, achei que a terminologia utilizada pode confundir um pouco. Nomes como **actions**, **reducers** e **store**, por exemplo.
 
-A grande inovação no desenvolvimento frontend não está no nível de componentes, mas no nível de gerenciamento de estado, segundo Max Lynch, cofundador do Ionic e poliglota em frameworks e linguagens de programação. Ele escreveu [um post bem interessante sobre Redux](https://medium.com/@maxlynch/redux-is-the-pivotal-frontend-innovation-a406736552cb), citando também alguns benefícios, como a redução da quantidade de bugs por centralizar o gerenciamento de estado e a possibilidade de escrever componentes puros.
+O cofundador do Ionic e poliglota em frameworks e linguagens de programação, Max Lynch, citou que a grande inovação no desenvolvimento frontend não está no nível de componentes, mas no nível de gerenciamento de estado. Ele escreveu [um post bem interessante sobre Redux](https://medium.com/@maxlynch/redux-is-the-pivotal-frontend-innovation-a406736552cb), citando também alguns benefícios, como a redução da quantidade de bugs por centralizar o gerenciamento de estado e a possibilidade de escrever componentes puros.
 
 Descomplicando conceitos
 ------------------------
@@ -40,7 +40,7 @@ Cada aplicação Redux possui somente uma **store** e através dela conseguimos 
 
 Mas como atualizar o estado do Redux?
 
-O primeiro passo é despachar uma **ação**. As ações do Redux servem para comunicar que algo ocorreu na aplicação, como um clique em um botão, por exemplo.
+O primeiro passo é despachar uma **ação**. As ações do Redux servem para comunicar que algo ocorreu na aplicação, como cliques em botões, envios de formulários, recebimento de uma resposta de API, etc.
 
 A ação é simplesmente um objeto javascript que possui um atributo ```type``` para representar o tipo da ação e um atributo ```payload``` com os dados que queremos introduzir no estado da aplicação.
 
@@ -100,7 +100,7 @@ O argumento ```state``` contém último estado que a função retornou, ou seja,
 <pre class="line-numbers" data-start="1" data-line="1-4,6"><code class="language-jsx">
 const initialState = {
   email: null,
-  displayName: 'Anonimous User',
+  displayName: 'Anonymous User',
 };
 
 export default (state = initialState, action) => {
@@ -120,7 +120,7 @@ import {
 
 const initialState = {
   email: '',
-  displayName: 'Anonimous User',
+  displayName: 'Anonymous User',
   error: '',
 };
 
@@ -172,7 +172,7 @@ Se a gente quiser implementar o logout, a lógica é bem parecida:
 <pre class="line-numbers" data-start="1" data-line="15-17"><code class="language-jsx">
 import {
   LOGIN_SUCCESSFULLY,
-  LOGGED_OUT
+  Anonymous
 } from 'types';
 
 export const login = (email, password) => {
@@ -185,7 +185,7 @@ export const login = (email, password) => {
 };
 
 export const logout = () => {
-  return { type: LOGGED_OUT };
+  return { type: Anonymous };
 };
 </code></pre>
 
@@ -194,12 +194,12 @@ E o reducer:
 <pre class="line-numbers" data-start="1" data-line="20-25"><code class="language-jsx">
 import {
   LOGIN_SUCCESSFULLY,
-  LOGGED_OUT
+  Anonymous
 } from '../actions/types';
 
 const initialState = {
   email: '',
-  displayName: 'Anonimous User',
+  displayName: 'Anonymous User',
   error: '',
 };
 
@@ -211,7 +211,7 @@ export default (state = initialState, action) => {
           email: action.payload.email,
           displayName: action.payload.displayName
         };
-    case LOGGED_OUT:
+    case Anonymous:
       return {
         ...state,
         email: initialState.email,
@@ -277,7 +277,7 @@ const store = createStore(
 
 O próximo passo é alterar a maneira de como retornamos a ação lá no action creator.
 
-A sacada do **redux-thuk** é fazer o action creator retornar uma função que cria uma ação, ao invés de retornar a ação diretamente.
+A sacada do **redux-thuk** é fazer o action creator **retornar uma função que cria uma ação**, ao invés de retornar a ação diretamente.
 
 O rascunho de action creator de ```login``` com redux-thuk fica assim:
 
@@ -291,7 +291,7 @@ export const login = () => {
 
 A função ```login``` agora retorna uma função que tem ```dispatch``` como argumento. Utilizamos a função ```dispatch``` para despachar a ação quando estivermos prontos. Isso nos dá muita flexibilidade.
 
-As ações comunicam o que acontece no sistema, lembra? Poderíamos depachar ações para informar quando o usuário deu início ao login e para falar que o login foi concluído com sucesso ou falha.
+As ações comunicam o que acontece no sistema, lembra? Poderíamos despachar ações para informar quando o usuário deu início ao login e para falar que o login foi concluído com sucesso ou falha.
 
 O código fica assim:
 
@@ -313,19 +313,19 @@ export const login = (email, password) => {
 
 No código acima, comunicamos quando o usuário resolveu fazer o login, com a ação do tipo ```LOGIN_USER``` e depois despachamos ```LOGIN_USER_SUCCESS``` ou ```LOGIN_USER_FAIL```, de acordo com a resposta da API.
 
-Com isso podemos fazer coisas legais, como mostrar um "carragando" entre o início e o fim da chamada de API.
+Com isso podemos fazer coisas legais, como mostrar um "carregando" entre o início e o fim da chamada de API.
 
 Precisamos modificar o reducer para isso:
 
 <pre class="line-numbers" data-start="1" data-line=""><code class="language-jsx">
 import {
   LOGIN_SUCCESSFULLY,
-  LOGED_OUT
+  LOGGED_OUT
 } from '../actions/types';
 
 const initialState = {
   email: '',
-  displayName: 'Anonimous User',
+  displayName: 'Anonymous User',
   error: '',
   loading: false,
 };
@@ -347,7 +347,7 @@ export default (state = initialState, action) => {
         error: action.payload.errorMessage,
         loading: false,
       };
-    case LOGED_OUT:
+    case LOGGED_OUT:
       return {
         ...state,
         email: initialState.email,
